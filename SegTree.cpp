@@ -79,3 +79,42 @@ struct SegTree{
         }
     }
 };
+
+
+
+struct SegTree{
+    int base;
+    vector<int> tree;
+    void update(int i, int value){
+        int pos=base+i;
+        int new_gcd=__gcd(value,tree[pos]);
+        tree[pos]=new_gcd;
+        pos/=2;
+        while(pos>0){
+            tree[pos]=__gcd(tree[2*pos],tree[2*pos+1]);
+            pos/=2;
+        }
+    }
+    int query(int ql, int qr, int nl, int nr, int node){
+        if(ql>nr || qr<nl){
+            return 0;
+        }
+        if(ql<=nl && nr<=qr){
+            return tree[node];
+        }
+        int mid=(nl+nr)/2;
+        return __gcd(query(ql,qr,nl,mid,2*node),query(ql,qr,mid+1,nr,2*node+1));
+    }
+    SegTree(vector<int> a){
+        int n=a.size();
+        base=1;
+        while(2*base<n){
+            base*=2;
+        }
+        base*=2;
+        tree.resize(2*base);
+        for(int i=0;i<n;i++){
+            update(i,a[i]);
+        }
+    }
+};
