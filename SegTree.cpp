@@ -1,35 +1,35 @@
 
 //Range Sum Queries:
 struct SegTree{
-    int base;
-    vector<int> tree;
-    void update(int i, int value){
-        int pos=base+i;
-        int delta=value-tree[pos];
+    ll base;
+    vector<ll> tree;
+    void update(ll i, ll value){
+        ll pos=base+i;
+        ll delta=value-tree[pos];
         while(pos>0){
             tree[pos]+=delta;
             pos/=2;
         }
     }
-    int query(int ql, int qr, int nl, int nr, int node){
+    ll query(ll ql, ll qr, ll nl, ll nr, ll node){
         if(ql>nr || qr<nl){
             return 0;
         }
         if(ql<=nl && nr<=qr){
             return tree[node];
         }
-        int mid=(nl+nr)/2;
+        ll mid=(nl+nr)/2;
         return query(ql,qr,nl,mid,2*node)+query(ql,qr,mid+1,nr,2*node+1);
     }
-    SegTree(vector<int> a){
-        int n=a.size();
+    SegTree(vector<ll> a){
+        ll n=a.size();
         base=1;
         while(2*base<n){
             base*=2;
         }
         base*=2;
         tree.resize(2*base);
-        for(int i=0;i<n;i++){
+        for(ll i=0;i<n;i++){
             update(i,a[i]);
         }
     }
@@ -45,10 +45,10 @@ Note :
 
 //Range Min Queries
 struct SegTree{
-    int base;
-    vector<int> tree;
-    void update(int i, int value){
-        int pos=base+i;
+    ll base;
+    vector<ll> tree;
+    void update(ll i, ll value){
+        ll pos=base+i;
         tree[pos]=value;
         pos/=2;
         while(pos>0){
@@ -56,25 +56,25 @@ struct SegTree{
             pos/=2;
         }
     }
-    int query(int ql, int qr, int nl, int nr, int node){
+    ll query(ll ql, ll qr, ll nl, ll nr, ll node){
         if(ql>nr || qr<nl){
             return INF;
         }
         if(ql<=nl && nr<=qr){
             return tree[node];
         }
-        int mid=(nl+nr)/2;
+        ll mid=(nl+nr)/2;
         return min(query(ql,qr,nl,mid,2*node),query(ql,qr,mid+1,nr,2*node+1));
     }
-    SegTree(vector<int> a){
-        int n=a.size();
+    SegTree(vector<ll> a){
+        ll n=a.size();
         base=1;
         while(2*base<n){
             base*=2;
         }
         base*=2;
         tree.resize(2*base,INF);
-        for(int i=0;i<n;i++){
+        for(ll i=0;i<n;i++){
             update(i,a[i]);
         }
     }
